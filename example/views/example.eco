@@ -1,0 +1,10 @@
+<html>
+  <head>
+    <%- js("app") %>
+    <%- css("app") %>
+    <title><%= @title %></title>
+  </head>
+  <body>
+    <p>Simple Startapp App</p>
+  </body>
+</html>
