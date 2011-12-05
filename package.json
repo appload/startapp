@@ -1,7 +1,7 @@
 {
   "name": "startapp",
   "description": "Coffeescript web app framework",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/appload/startapp",
   "repository": "https://github.com/appload/startapp.git",
   "author": "Rafał Sobota",
