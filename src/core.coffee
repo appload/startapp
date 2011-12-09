@@ -10,6 +10,10 @@ class StartappCore
   @set_routes: (prefix, app) ->
     for [method, path, controller, action] in @_routes
       if method is "mount"
+        unless controller?
+          [path, controller] = ["", path]
+        if path == "/"
+          path = ""
         controller.set_routes prefix + path, app
       else
         unless action?

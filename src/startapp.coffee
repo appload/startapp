@@ -38,10 +38,9 @@ class Startapp extends StartappCore
   
   @resource: (path = "", controller = @) ->
     @get  "#{path}",      controller,  "index"
-    @get  "#{path}/:id",  controller,  "get"
     @post "#{path}",      controller,  "create"
+    @get  "#{path}/:id",  controller,  "show"
     @put  "#{path}/:id",  controller,  "update"
-    @del  "#{path}/:id",  controller,  "delete"
-    
+    @del  "#{path}/:id",  controller,  "destroy"
   
 module.exports = Startapp
