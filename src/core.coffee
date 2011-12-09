@@ -1,9 +1,13 @@
 express = require("express")
-_ = require("underscore")
 
 class StartappCore
   
   constructor: (@req, @res, @next) ->
+    @params = @req.params
+    @body = @req.body
+  
+  send: (args...) ->
+    @res.send args...
   
   @environment: (app) ->
   
@@ -40,6 +44,13 @@ class StartappCore
       @[method] = (args...) ->
         @_routes = (route for route in @_routes or []) # copy of existing route array
         @_routes.push [method, args...]
+  
+  @resource: (path = "", controller = @) ->
+    @get  "#{path}",      controller,  "index"
+    @post "#{path}",      controller,  "create"
+    @get  "#{path}/:id",  controller,  "show"
+    @put  "#{path}/:id",  controller,  "update"
+    @del  "#{path}/:id",  controller,  "destroy"
   
   @listen: (port = 3000) ->
     app = express.createServer()

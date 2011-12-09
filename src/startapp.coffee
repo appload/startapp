@@ -15,11 +15,6 @@ class Startapp extends StartappCore
     keygrip = new Keygrip([@cookie_secret] if @cookie_secret?)
     @cookies = new Cookies(@req, @res, keygrip)
     @session = @req.session
-    @params = @req.params
-    @body = @req.body
-  
-  send: (args...) ->
-    @res.send args...
   
   get_dirname = ->
     @dirname?() or @dirname
@@ -35,12 +30,5 @@ class Startapp extends StartappCore
 
     app.register ".eco", eco
     app.set 'view engine', "eco"
-  
-  @resource: (path = "", controller = @) ->
-    @get  "#{path}",      controller,  "index"
-    @post "#{path}",      controller,  "create"
-    @get  "#{path}/:id",  controller,  "show"
-    @put  "#{path}/:id",  controller,  "update"
-    @del  "#{path}/:id",  controller,  "destroy"
   
 module.exports = Startapp
