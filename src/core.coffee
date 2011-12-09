@@ -31,7 +31,7 @@ class StartappCore
     for key, val of obj
       @::[key] = val
   
-  for method in ["get", "post", "put", "del", "mount"]
+  for method in ["get", "post", "put", "delete", "all", "mount"]
     do (method) =>
       @[method] = (args...) ->
         @_routes = (route for route in @_routes or []) # copy of existing route array
