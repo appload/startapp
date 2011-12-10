@@ -14,29 +14,33 @@ By object oriented nature it is much simpler to reuse code. In addition to **sha
 ### Simplicity
 Of course it has **perfect defaults** if You want to start quickly and smoothly.
 
-## Get involved
+## Code example
 
-    Startapp = require "startapp"
-    
-    
-    class App extends Startapp
-      
-      hello: (name = "world") ->
-        @send "hello, #{name}!"
-      
-      @get "/", "hello"
-      
-      @get "/hello", "hello"
-      
-      @get "/hello/:name", ->
-        @hello @params.name
-      
-      
-    App.listen 3000
+```coffee-script
+Startapp = require "startapp"
+
+
+class App extends Startapp
+  
+  hello: (name = "world") ->
+    @send "hello, #{name}!"
+  
+  @get "/", "hello"
+  
+  @get "/hello", "hello"
+  
+  @get "/hello/:name", ->
+    @hello @params.name
+  
+  
+App.listen 3000
+```
 
 ## Installation
 
-    npm install startapp
+```bash
+npm install startapp
+```
 
 ## Routing
 
@@ -46,117 +50,136 @@ Startapp provides class methods <code>@get, @post, @put, @delete</code> for corr
 
 In App class body:
 
-      @get "/", -> @send "main page"
+```coffee-script
+@get "/", -> @send "main page"
+```
 
 works the same as:
 
-      @get "/", "index"
-      
-      index: -> @send "main page"
+```coffee-script
+@get "/", "index"
+
+index: -> @send "main page"
+```
 
 but to named functions you can refer from multiple routes or other methods:
-  
-      hello: (name = "world") ->
-        @send "hello, #{name}!"
-  
-      @get "/", "hello"
-  
-      @get "/hello", "hello"
-  
-      @get "/hello/:name", ->
-        @hello @params.name
+
+```coffee-script
+hello: (name = "world") ->
+  @send "hello, #{name}!"
+
+@get "/", "hello"
+
+@get "/hello", "hello"
+
+@get "/hello/:name", ->
+  @hello @params.name
+```
 
 You can also refer from other controllers:
-    
-    class Intro extends Startapp
-      features: ->  # ...
-    
-    class Users extends Startapp
-      login: ->     # ...
-      signup: ->    # ...
-      
-    class App extends Startapp
-      @get  "/",                  "index"
-      @get  "/features",  Intro,  "features"
-      @get  "/login",     Users,  "login"
-      @post "/signup",    Users,  "signup"
-       
-      index: ->     # ...
-    
-    App.listen 80
+
+```coffee-script
+class Intro extends Startapp
+  features: ->  # ...
+
+class Users extends Startapp
+  login: ->     # ...
+  signup: ->    # ...
+  
+class App extends Startapp
+  @get  "/",                  "index"
+  @get  "/features",  Intro,  "features"
+  @get  "/login",     Users,  "login"
+  @post "/signup",    Users,  "signup"
+   
+  index: ->     # ...
+
+App.listen 80
+```
     
 ### @resource
 
 If you provide REST API you may want to do something like:
 
-    class Books extends Startapp
-      @get    "/books",     "index"
-      @post   "/books",     "create"
-      @get    "/books/:id", "show"
-      @put    "/books/:id", "update"
-      @delete "/books/:id", "destroy"
-      
-      index: ->     # ...
-      create: ->    # ...
-      show: ->      # ...
-      update: ->    # ...
-      destroy: ->   # ...
+```coffee-script
+class Books extends Startapp
+  @get    "/books",     "index"
+  @post   "/books",     "create"
+  @get    "/books/:id", "show"
+  @put    "/books/:id", "update"
+  @delete "/books/:id", "destroy"
+  
+  index: ->     # ...
+  create: ->    # ...
+  show: ->      # ...
+  update: ->    # ...
+  destroy: ->   # ...
+```
 
 Convention comes from Rails and similarly You can use <code>@resource</code> helper instead:
     
-    class Books extends Startapp
-      @resource "/books"
-      
-      index: ->     # ...
-      create: ->    # ...
-      show: ->      # ...
-      update: ->    # ...
-      destroy: ->   # ...
+```coffee-script
+class Books extends Startapp
+  @resource "/books"
+  
+  index: ->     # ...
+  create: ->    # ...
+  show: ->      # ...
+  update: ->    # ...
+  destroy: ->   # ...
+```
 
 You can also refer to another controller:
 
-    class Books extends Startapp
-      index: ->     # ...
-      show: ->      # ...
-    
-    class App extends Startapp
-      @resource "/books", Books
+```coffee-script
+class Books extends Startapp
+  index: ->     # ...
+  show: ->      # ...
+
+class App extends Startapp
+  @resource "/books", Books
+```
 
 As You see, You are not obligated to implement all resource methods. Not implemented would natuarally return 404. If You want to mount your resource at the root url:
 
-    @resource()
+```coffee-script
+@resource()
+```
 
 works the same as:
 
-    @resource "/"    
+```coffee-script
+@resource "/"
+```
 
 ### @mount
 
 If You want to reuse part of Your app in another project or You simply don't want to keep all routes in one place You can use routing delegation by <code>@mount</code> class method:
 
-    class App extends Startapp
-      @mount                Auth
-      @mount "/shop/books", Books
+```coffee-script
+class App extends Startapp
+  @mount                Auth
+  @mount "/shop/books", Books
+```
 
 to existing controllers:
 
-    class Auth extends Startapp
-      
-      @get  "/login",   "login_form"
-      @post "/login",   "login"
-      @get  "/logout",  "logout"
-      
-      login_form: ->          # GET   "/login"
-      login: ->               # POST  "/login"
-      logout: ->              # GET   "/logout"
-    
-    class Books extends Startapp
-      @resource()
-      @get "/:id/comments"
-      
-      index: ->               # GET   "/shop/books"
-      show: ->                # GET   "/shop/books/:id"
-      comments: ->            # GET   "/shop/books/:id/comments"
-      
-    
-      
+```coffee-script
+class Auth extends Startapp
+  
+  @get  "/login",   "login_form"
+  @post "/login",   "login"
+  @get  "/logout",  "logout"
+  
+  login_form: ->          # GET   "/login"
+  login: ->               # POST  "/login"
+  logout: ->              # GET   "/logout"
+
+class Books extends Startapp
+  @resource()
+  @get "/:id/comments"
+  
+  index: ->               # GET   "/shop/books"
+  show: ->                # GET   "/shop/books/:id"
+  comments: ->            # GET   "/shop/books/:id/comments"
+```
